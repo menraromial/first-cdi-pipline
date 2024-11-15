@@ -23,6 +23,10 @@ sysctl --system without reboot
 
 
 ```bash
+swapoff -a
+```
+
+```bash
 apt-get update -y
 apt-get install -y software-properties-common gpg curl apt-transport-https ca-certificates
 
