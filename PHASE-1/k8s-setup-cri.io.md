@@ -65,3 +65,39 @@ apt-cache madison kubeadm | tac
 ```bash
 apt-get install -y kubelet=1.30.0-1.1 kubectl=1.30.0-1.1 kubeadm=1.30.0-1.1
 ```
+```bash
+apt-get install -y jq
+local_ip="$(ip --json addr show ens10f0np0 | jq -r '.[0].addr_info[] | select(.family == "inet") | .local')"
+cat > /etc/default/kubelet << EOF
+KUBELET_EXTRA_ARGS=--node-ip=$local_ip
+EOF
+```
+
+On master Node
+
+```bash
+IPADDR="10.0.0.10"
+NODENAME=$(hostname -s)
+POD_CIDR="192.168.0.0/16"
+```
+
+
+```bash
+kubeadm init --apiserver-advertise-address=$IPADDR  --apiserver-cert-extra-sans=$IPADDR  --pod-network-cidr=$POD_CIDR --node-name $NODENAME --ignore-preflight-errors Swap
+```
+
+```bash
+mkdir -p $HOME/.kube
+cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+chown $(id -u):$(id -g) $HOME/.kube/config
+```
+
+```bash
+kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+```
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/techiescamp/kubeadm-scripts/main/manifests/metrics-server.yaml
+```
+
+
