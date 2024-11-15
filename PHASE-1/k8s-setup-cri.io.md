@@ -80,7 +80,7 @@ EOF
 On master Node
 
 ```bash
-IPADDR="10.0.0.10"
+IPADDR="$(ip --json addr show ens10f0np0 | jq -r '.[0].addr_info[] | select(.family == "inet") | .local')"
 NODENAME=$(hostname -s)
 POD_CIDR="192.168.0.0/16"
 ```
