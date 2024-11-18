@@ -104,7 +104,7 @@ docker push localhost:5000/scheduler-plugins/kube-scheduler:v20241118-
 
 
 ```bash
-
+curl -X GET http://localhost:5000/v2/_catalog
 ```
 
 ```bash
