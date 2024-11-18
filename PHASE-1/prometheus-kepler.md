@@ -92,6 +92,12 @@ curl -G 'http://localhost:9090/api/v1/query' \
     --data-urlencode 'query=kepler_node_core_joules_total{mode="dynamic"}'
 ```
 
+
+```bash
+docker run -d -p 5000:5000 --restart=always --name registry registry:2
+```
+
+
 ```bash
 
 ```
