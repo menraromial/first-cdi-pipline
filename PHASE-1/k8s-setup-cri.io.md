@@ -118,3 +118,9 @@ Install yq
 wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq &&\
     chmod +x /usr/bin/yq
 ```
+
+
+#### Avoir la liste de tous les pods d'un noeud en partriculier
+```bash
+kubectl get pods --all-namespaces --field-selector spec.nodeName=NODE_NAME
+```
