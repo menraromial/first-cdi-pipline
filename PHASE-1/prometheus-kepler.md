@@ -123,6 +123,9 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 docker run -d -p 5000:5000 --restart=always --name registry registry:2
 ```
 
+```bash
+mkdir go/src/sigs.k8s.io
+```
 
 ```bash
 docker push localhost:5000/scheduler-plugins/kube-scheduler:v20241118-
@@ -132,6 +135,12 @@ docker push localhost:5000/scheduler-plugins/kube-scheduler:v20241118-
 ```bash
 curl -X GET http://localhost:5000/v2/_catalog
 ```
+
+
+```bash
+git clone https://github.com/menraromial/scheduler-plugins.git
+```
+
 
 ```bash
 
