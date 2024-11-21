@@ -145,3 +145,51 @@ git clone https://github.com/menraromial/scheduler-plugins.git
 ```bash
 
 ```
+
+
+### Setup scaphandre
+
+```bash
+git clone https://github.com/hubblo-org/scaphandre
+cd scaphandre
+helm install scaphandre helm/scaphandre
+```
+
+```bash
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo add kube-state-metrics https://kubernetes.github.io/kube-state-metrics
+helm repo update
+
+helm install prometheus prometheus-community/prometheus \
+--set alertmanager.persistentVolume.enabled=false \
+--set server.persistentVolume.enabled=false
+```
+
+```bash
+kubectl port-forward deploy/prometheus-server 9090:9090
+```
+
+```bash
+kubectl create configmap scaphandre-dashboard \
+    --from-file=scaphandre-dashboard.json=docs_src/tutorials/grafana-kubernetes-dashboard.json
+```
+
+```bash
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo update
+
+helm install grafana grafana/grafana --values docs_src/tutorials/grafana-helm-values.yaml
+```
+
+```bash
+kubectl get secret grafana -o jsonpath="{.data.admin-password}" | base64 --decode
+```
+
+```bash
+kubectl port-forward deploy/grafana 3000:3000
+```
+
+#### Cleaning up
+```bash
+helm delete grafana prometheus scaphandre
+```
