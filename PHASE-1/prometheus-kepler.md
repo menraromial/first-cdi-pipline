@@ -194,6 +194,11 @@ curl -G 'http://localhost:9090/api/v1/query' \
     --data-urlencode 'query=scaph_host_power_microwatts'
 ```
 
+```bash
+curl -G 'http://localhost:9090/api/v1/query' \
+    --data-urlencode 'query=scaph_host_power_microwatts{node="worker1"}'
+```
+
 #### Cleaning up
 ```bash
 helm delete grafana prometheus scaphandre
