@@ -189,7 +189,15 @@ kubectl get secret grafana -o jsonpath="{.data.admin-password}" | base64 --decod
 kubectl port-forward deploy/grafana 3000:3000
 ```
 
+```bash
+curl -G 'http://localhost:9090/api/v1/query' \
+    --data-urlencode 'query=scaph_host_power_microwatts'
+```
+
 #### Cleaning up
 ```bash
 helm delete grafana prometheus scaphandre
 ```
+
+
+
