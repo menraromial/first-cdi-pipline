@@ -204,5 +204,9 @@ curl -G 'http://localhost:9090/api/v1/query' \
 helm delete grafana prometheus scaphandre
 ```
 
+```bash
+kubectl port-forward service/wordpress-service 8080:80
+```
+
 
 
