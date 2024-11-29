@@ -232,6 +232,19 @@ scaph_process_power_consumption_microwatts
 
 
 ### Mattermost
+
+- Installation
+  ```bash
+  helm repo add mattermost https://helm.mattermost.com
+  helm repo update
+  git clone https://github.com/mattermost/mattermost-helm.git
+  cd charts/focalboard
+  helm install focalboard . -n focalboard -f values.yaml
+  cp values.yaml config.yaml
+  helm install mattermost/focalboard
+  ```
+  
+
 ```bash
 NAME: focalboard
 LAST DEPLOYED: Fri Nov 29 12:49:13 2024
