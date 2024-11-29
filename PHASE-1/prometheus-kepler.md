@@ -209,4 +209,9 @@ kubectl port-forward service/wordpress-service 8080:80
 ```
 
 
+### Scaphandre metrics
+
+```bash
+scaph_process_power_consumption_microwatts
+```
 
