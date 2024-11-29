@@ -230,3 +230,19 @@ scaph_process_power_consumption_microwatts
 
 ```
 
+
+### Mattermost
+```bash
+NAME: focalboard
+LAST DEPLOYED: Fri Nov 29 12:49:13 2024
+NAMESPACE: focalboard
+STATUS: deployed
+REVISION: 1
+NOTES:
+1. Get the application URL by running these commands:
+  export POD_NAME=$(kubectl get pods --namespace focalboard -l "app.kubernetes.io/name=focalboard,app.kubernetes.io/instance=focalboard" -o jsonpath="{.items[0].metadata.name}")
+  export CONTAINER_PORT=$(kubectl get pod --namespace focalboard $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+  kubectl --namespace focalboard port-forward $POD_NAME 80:$CONTAINER_PORT
+  echo "Visit http://127.0.0.1:80 to use your application"
+```
+
