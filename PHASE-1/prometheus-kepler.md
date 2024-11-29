@@ -215,3 +215,18 @@ kubectl port-forward service/wordpress-service 8080:80
 scaph_process_power_consumption_microwatts
 ```
 
+
+
+```bash
+1. Complete your nextcloud deployment by running:
+
+  export APP_HOST=127.0.0.1
+  export APP_PASSWORD=$(kubectl get secret --namespace default nextcloud -o jsonpath="{.data.nextcloud-password}" | base64 --decode)
+
+  ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
+
+  helm upgrade nextcloud nextcloud/nextcloud \
+    --set nextcloud.password=$APP_PASSWORD,nextcloud.host=$APP_HOST,service.type=ClusterIP,mariadb.enabled=false,externalDatabase.user=nextcloud,externalDatabase.database=nextcloud,externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST
+
+```
+
