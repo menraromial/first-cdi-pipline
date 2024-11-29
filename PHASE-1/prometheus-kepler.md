@@ -215,7 +215,18 @@ kubectl port-forward service/wordpress-service 8080:80
 scaph_process_power_consumption_microwatts
 ```
 
-
+### NextCloud
+- Install
+  ```bash
+  helm repo add nextcloud https://nextcloud.github.io/helm/
+  helm repo update
+  helm nextcloud nextcloud/nextcloud
+  ```
+- Port forward
+  ```bash
+  sudo kubectl port-forward service/nextcloud 8080:8080
+  ```
+  
 
 ```bash
 1. Complete your nextcloud deployment by running:
@@ -243,6 +254,10 @@ scaph_process_power_consumption_microwatts
   cp values.yaml config.yaml
   helm install mattermost/focalboard
   ```
+- Port forward
+  ```bash
+   sudo kubectl port-forward service/mattermost-focalboard 8080:80
+  ```
   
 
 ```bash
@@ -258,4 +273,7 @@ NOTES:
   kubectl --namespace focalboard port-forward $POD_NAME 80:$CONTAINER_PORT
   echo "Visit http://127.0.0.1:80 to use your application"
 ```
+
+
+
 
