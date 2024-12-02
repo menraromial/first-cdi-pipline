@@ -275,5 +275,11 @@ NOTES:
 ```
 
 
+### STRAPI
+Super Admin:
+
+email: admin@strapidemo.com
+password: welcomeToStrapi123
+
 
 
