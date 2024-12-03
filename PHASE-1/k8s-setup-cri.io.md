@@ -88,7 +88,7 @@ POD_CIDR="192.168.0.0/16"
 
 
 ```bash
-kubeadm init --apiserver-advertise-address=$IPADDR  --apiserver-cert-extra-sans=$IPADDR  --pod-network-cidr=$POD_CIDR --node-name $NODENAME --ignore-preflight-errors Swap
+sudo kubeadm init --apiserver-advertise-address=$IPADDR --apiserver-cert-extra-sans=$IPADDR --pod-network-cidr=$POD_CIDR --node-name $NODENAME --ignore-preflight-errors Swap --cri-socket unix:///var/run/containerd/containerd.sock --v=5
 ```
 
 ```bash
