@@ -283,7 +283,7 @@ password: welcomeToStrapi123
 
 
 ### Replace prometheus-k8s network policy
-```bash
+```yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
