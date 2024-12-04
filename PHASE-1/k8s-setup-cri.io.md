@@ -72,7 +72,7 @@ apt-get install -y kubelet=1.30.0-1.1 kubectl=1.30.0-1.1 kubeadm=1.30.0-1.1
 ```
 ```bash
 apt-get install -y jq
-local_ip="$(ip --json addr show ens10f0np0 | jq -r '.[0].addr_info[] | select(.family == "inet") | .local')"
+local_ip="$(ip --json addr show enp85s0 | jq -r '.[0].addr_info[] | select(.family == "inet") | .local')"
 cat > /etc/default/kubelet << EOF
 KUBELET_EXTRA_ARGS=--node-ip=$local_ip
 EOF
@@ -81,7 +81,7 @@ EOF
 On master Node
 
 ```bash
-IPADDR="$(ip --json addr show ens10f0np0 | jq -r '.[0].addr_info[] | select(.family == "inet") | .local')"
+IPADDR="$(ip --json addr show enp85s0 | jq -r '.[0].addr_info[] | select(.family == "inet") | .local')"
 NODENAME=$(hostname -s)
 POD_CIDR="192.168.0.0/16"
 ```
