@@ -220,7 +220,7 @@ scaph_process_power_consumption_microwatts
   ```bash
   helm repo add nextcloud https://nextcloud.github.io/helm/
   helm repo update
-  helm nextcloud nextcloud/nextcloud
+  helm install nextcloud nextcloud/nextcloud
   ```
 - Port forward
   ```bash
