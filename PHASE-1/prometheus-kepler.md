@@ -347,4 +347,8 @@ pod_name="cpu-intensive-app-d5665bc99-7wdpx",
 service="kepler-exporter"}
 ```
 
+- *Example of queries*
+  ```bash
+  max_over_time(irate(kepler_container_joules_total{pod_name=~".*fastapi-user.*"}[1m])[1h:])
+  ```
 
