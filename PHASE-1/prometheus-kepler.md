@@ -347,8 +347,13 @@ pod_name="cpu-intensive-app-d5665bc99-7wdpx",
 service="kepler-exporter"}
 ```
 
-- *Example of queries*
+1- **Example of queries**
+- **get the maximum rate over a 1-hour period**
   ```bash
   max_over_time(irate(kepler_container_joules_total{pod_name=~".*fastapi-user.*"}[1m])[1h:])
+  ```
+- **Calculate the 5-minute-averaged irate over a 1-hour period, at a 15-second subquery resolution**
+  ```bash
+  irate(kepler_container_joules_total{pod_name=~".*fastapi-user.*"}[1m])[1h:15m]
   ```
 
