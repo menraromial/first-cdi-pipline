@@ -352,8 +352,13 @@ service="kepler-exporter"}
   ```bash
   max_over_time(irate(kepler_container_joules_total{pod_name=~".*fastapi-user.*"}[1m])[1h:])
   ```
+  - **Return the maximum**
+    ```bash
+    max(max_over_time(irate(kepler_container_joules_total{pod_name=~".*fastapi-user.*"}[1m])[1h:]))
+    ```
 - **Calculate the 5-minute-averaged irate over a 1-hour period, at a 15-second subquery resolution**
   ```bash
   irate(kepler_container_joules_total{pod_name=~".*fastapi-user.*"}[1m])[1h:15m]
   ```
+
 
