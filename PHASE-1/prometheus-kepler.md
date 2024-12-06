@@ -332,7 +332,7 @@ spec:
 ```
 
 ### Kepler Container metrics
-``ỳaml
+```bash
 kepler_container_joules_total{container="kepler-exporter", container_id="a90477e08423cfd1cda876bbf6903543ab30e496e0331a94f6bf200852cf3b34", container_name="cpu-intensive-app", container_namespace="default", endpoint="http", instance="worker1", job="kepler-exporter", mode="dynamic", namespace="kepler", pod="kepler-exporter-hxh9s", pod_name="cpu-intensive-app-d5665bc99-7wdpx", service="kepler-exporter"}
 ```
 
