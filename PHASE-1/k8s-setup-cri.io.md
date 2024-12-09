@@ -27,6 +27,10 @@ swapoff -a
 ```
 
 ```bash
+sudo nano /etc/fstab
+```
+
+```bash
 sudo apt-get update -y
 sudo apt-get install -y software-properties-common gpg curl apt-transport-https ca-certificates
 
