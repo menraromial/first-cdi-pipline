@@ -3,22 +3,25 @@ Step 1: Enable iptables Bridged Traffic on all the Nodes
 Execute the following commands on all the nodes for IPtables to see bridged traffic. Here we are tweaking some kernel parameters and setting them using sysctl.
 
 ```bash
-cat <<EOF | tee /etc/modules-load.d/k8s.conf
+# Charger les modules kernel nécessaires et les configurer pour le chargement au démarrage
+cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
 overlay
 br_netfilter
 EOF
 
-modprobe overlay
-modprobe br_netfilter
+sudo modprobe overlay
+sudo modprobe br_netfilter
 
-# sysctl params required by setup, params persist across reboots
-cat <<EOF | tee /etc/sysctl.d/k8s.conf
+# Configurer les paramètres sysctl nécessaires pour Kubernetes et les rendre persistants
+cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-iptables  = 1
 net.bridge.bridge-nf-call-ip6tables = 1
 net.ipv4.ip_forward                 = 1
 EOF
 
-sysctl --system without reboot
+# Appliquer immédiatement les paramètres sysctl sans redémarrage
+sudo sysctl --system
+
 ```
 
 
