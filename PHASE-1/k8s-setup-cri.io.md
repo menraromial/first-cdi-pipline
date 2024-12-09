@@ -54,8 +54,13 @@ sudo systemctl start crio.service
 ```bash 
 VERSION="v1.30.0"
 wget https://github.com/kubernetes-sigs/cri-tools/releases/download/$VERSION/crictl-$VERSION-linux-amd64.tar.gz
-tar zxvf crictl-$VERSION-linux-amd64.tar.gz -C /usr/local/bin
+
+# Extraire l'archive dans /usr/local/bin (nécessite sudo)
+sudo tar zxvf crictl-$VERSION-linux-amd64.tar.gz -C /usr/local/bin
+
+# Supprimer l'archive téléchargée (facultatif)
 rm -f crictl-$VERSION-linux-amd64.tar.gz
+
 ```
 
 
