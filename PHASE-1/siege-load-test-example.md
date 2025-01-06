@@ -219,7 +219,7 @@ http://my-guestbook.example.com/guestbook.php
 http://my-guestbook.example.com/guestbook.php?cmd=get&key=messages
 ```
 
-Once this is done, you can fire up Siege to begin load testing. In this case, to get fast results, we’ll use 255 concurrent users for five minutes, using Internet and benchmark modes.
+Once this is done, you can fire up Siege to begin load testing. In this case, to get fast results, we’ll use 255 concurrent users for ten minutes, using Internet and benchmark modes.
 
 ```bash
 siege --verbose --benchmark --internet --concurrent 255 --time 10M --file siege-urls.txt
@@ -231,4 +231,29 @@ You should see Siege begin to rapidly send requests to your Guestbook applicatio
 watch -d -n 2 -b -c kubectl get hpa guestbook-frontend
 ```
 
-During the five minute load test, you should notice CPU usage rise and then new replicas will appear. Depending on what your original requests and limits are for the deployment, you will see different results. Next, try setting the deployment’s requests / limits to lower values if nothing seems to happen while testing.
+During the ten minute load test, you should notice CPU usage rise and then new replicas will appear. Depending on what your original requests and limits are for the deployment, you will see different results. Next, try setting the deployment’s requests / limits to lower values if nothing seems to happen while testing.
+
+
+
+
+The `siege` command is a popular HTTP load testing and benchmarking tool that can be used to evaluate the performance of web servers under stress. Here's a breakdown of the command you provided:
+
+### Breakdown of the Command
+
+1. **`siege`**: This is the command to invoke the Siege tool.
+
+2. **`--verbose`**: This flag enables verbose output, meaning Siege will provide detailed information about its operations, including each request made, the response received, and various statistics.
+
+3. **`--benchmark`**: This option runs Siege in benchmarking mode, meaning it will perform stress testing without any delays between requests, simulating a heavy load.
+
+4. **`--internet`**: This flag simulates internet connections by introducing delays between requests, mimicking more realistic user behavior.
+
+5. **`--concurrent 255`**: This specifies the number of concurrent simulated users. In this case, Siege will simulate 255 users making requests simultaneously.
+
+6. **`--time 10M`**: This sets the duration of the test. The test will run for 10 minutes (`10M`).
+
+7. **`--file siege-urls.txt`**: This option tells Siege to read the URLs to be tested from the file `siege-urls.txt`. Each URL in this file will be used as a target for the requests.
+
+### Summary
+
+This command will run a load test on the URLs specified in `siege-urls.txt` using 255 concurrent users for 10 minutes. It will provide verbose output and simulate internet-like behavior while benchmarking the server's performance under a heavy load.
