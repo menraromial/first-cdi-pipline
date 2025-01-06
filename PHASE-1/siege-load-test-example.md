@@ -212,6 +212,11 @@ spec:
 To force the HPA into action, we’ll use Siege, an HTTP load testing and benchmark utility. Siege is a multi-threaded load testing tool and has a few other capabilities included to make it a good option for putting some force onto a simple web app.
 
 First, put various permutations of the URL in a plaintext file. By doing this, Siege can randomly scan the URLs in he text file and ping them in “Internet mode” by randomly selecting a URL from the list for each request. This could look like the following…
+```bash
+sudo apt install siege -y
+```
+
+
 ```txt
 http://my-guestbook.example.com/
 http://my-guestbook.example.com/index.html
