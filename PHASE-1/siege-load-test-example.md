@@ -224,3 +224,11 @@ Once this is done, you can fire up Siege to begin load testing. In this case, to
 ```bash
 siege --verbose --benchmark --internet --concurrent 255 --time 10M --file siege-urls.txt
 ```
+
+You should see Siege begin to rapidly send requests to your Guestbook application. Now that the action is in progress, you can slowly observe your CPU utilization begin to climb. Watch it slowly change by using watch.
+
+```bash
+watch -d -n 2 -b -c kubectl get hpa guestbook-frontend
+```
+
+During the five minute load test, you should notice CPU usage rise and then new replicas will appear. Depending on what your original requests and limits are for the deployment, you will see different results. Next, try setting the deployment’s requests / limits to lower values if nothing seems to happen while testing.
