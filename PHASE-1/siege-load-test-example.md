@@ -127,7 +127,7 @@ Now that you have the Redis storage of your guestbook up and running, start the 
 
 The guestbook app uses a PHP frontend. It is configured to communicate with either the Redis follower or leader Services, depending on whether the request is a read or a write. The frontend exposes a JSON interface, and serves a jQuery-Ajax-based UX.
 
-#### Creating the Guestbook Frontend Deployment 
+### Creating the Guestbook Frontend Deployment 
 
 ```yaml
 # SOURCE: https://cloud.google.com/kubernetes-engine/docs/tutorials/guestbook
@@ -164,3 +164,63 @@ spec:
 
 ```
 
+### Creating the Frontend Service 
+The Redis Services you applied is only accessible within the Kubernetes cluster because the default type for a Service is ClusterIP. ClusterIP provides a single IP address for the set of Pods the Service is pointing to. This IP address is accessible only within the cluster.
+
+If you want guests to be able to access your guestbook, you must configure the frontend Service to be externally visible, so a client can request the Service from outside the Kubernetes cluster. However a Kubernetes user can use kubectl port-forward to access the service even though it uses a ClusterIP.
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  labels:
+    app: guestbook
+    tier: frontend
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: guestbook
+    tier: frontend
+```
+
+## Create the HPA for Guestbook
+Now, create a new HPA spec file for the guestbook.
+```yaml
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: guestbook-frontend
+  #namespace: guestbook
+  labels:
+    app: guestbook
+    #env: production
+    tier: frontend
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1beta1
+    kind: Deployment
+    name: frontend
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 75
+```
+
+## Load test with Siege
+To force the HPA into action, we’ll use Siege, an HTTP load testing and benchmark utility. Siege is a multi-threaded load testing tool and has a few other capabilities included to make it a good option for putting some force onto a simple web app.
+
+First, put various permutations of the URL in a plaintext file. By doing this, Siege can randomly scan the URLs in he text file and ping them in “Internet mode” by randomly selecting a URL from the list for each request. This could look like the following…
+```txt
+http://my-guestbook.example.com/
+http://my-guestbook.example.com/index.html
+http://my-guestbook.example.com/guestbook.php
+http://my-guestbook.example.com/guestbook.php?cmd=get&key=messages
+```
+
+Once this is done, you can fire up Siege to begin load testing. In this case, to get fast results, we’ll use 255 concurrent users for five minutes, using Internet and benchmark modes.
+
+```bash
+siege --verbose --benchmark --internet --concurrent 255 --time 10M --file siege-urls.txt
+```
