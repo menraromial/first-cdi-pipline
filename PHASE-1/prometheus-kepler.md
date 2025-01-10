@@ -374,4 +374,12 @@ kubectl label node worker2 rapl1/constraint_0_power_limit_uw=<new-value> --overw
 kubectl label node worker2 rapl1/constraint_1_power_limit_uw=<new-value> --overwrite
 ```
 
+### get network policy as yaml
+```bash
+kubectl get networkpolicy grafana -n monitoring -o yaml
+```
 
+### get service as yaml
+```bash
+kubectl get svc grafana -n monitoring -o yaml
+```
