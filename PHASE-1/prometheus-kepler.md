@@ -383,3 +383,61 @@ kubectl get networkpolicy grafana -n monitoring -o yaml
 ```bash
 kubectl get svc grafana -n monitoring -o yaml
 ```
+
+### Expose grafana svc as NodePort
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: grafana
+  namespace: monitoring
+  labels:
+    app.kubernetes.io/component: grafana
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/part-of: kube-prometheus
+    app.kubernetes.io/version: 11.2.1
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/component: grafana
+      app.kubernetes.io/name: grafana
+      app.kubernetes.io/part-of: kube-prometheus
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: prometheus
+    - ipBlock:
+        cidr: 0.0.0.0/0    # Permet l'accès externe
+    ports:
+    - port: 3000
+      protocol: TCP
+  egress:
+  - {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-nodeport
+  namespace: monitoring
+  labels:
+    app.kubernetes.io/component: grafana
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/part-of: kube-prometheus
+    app.kubernetes.io/version: 11.2.1
+spec:
+  type: NodePort
+  ports:
+  - name: http
+    port: 3000         # Port interne reste 3000
+    protocol: TCP
+    targetPort: http
+    nodePort: 30300    # Port externe 30300
+  selector:
+    app.kubernetes.io/component: grafana
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/part-of: kube-prometheus
+```
