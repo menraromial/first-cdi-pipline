@@ -362,3 +362,16 @@ service="kepler-exporter"}
   ```
 
 
+### Get all RAPL metrics for a specific node
+```bash
+kubectl get nodes worker2 -o jsonpath='{.metadata.labels}' | grep -oP '"[^"]*rapl[^"]*":\s*"[^"]*"'
+```
+### Modifier la valeur du label
+```bash
+kubectl label node worker2 rapl0/constraint_0_power_limit_uw=<new-value> --overwrite
+kubectl label node worker2 rapl0/constraint_1_power_limit_uw=<new-value> --overwrite
+kubectl label node worker2 rapl1/constraint_0_power_limit_uw=<new-value> --overwrite
+kubectl label node worker2 rapl1/constraint_1_power_limit_uw=<new-value> --overwrite
+```
+
+
