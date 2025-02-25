@@ -380,7 +380,10 @@ kubectl label node worker3 rapl0/constraint_1_power_limit_uw-
 kubectl label node worker3 rapl1/constraint_0_power_limit_uw-
 kubectl label node worker3 rapl1/constraint_1_power_limit_uw-
 ```
-
+### Supprimer une annotation
+```bash
+kubectl annotate node worker3 power-manager/initialized-
+```
 ### get network policy as yaml
 ```bash
 kubectl get networkpolicy grafana -n monitoring -o yaml
