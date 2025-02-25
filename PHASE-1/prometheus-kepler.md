@@ -373,6 +373,13 @@ kubectl label node worker2 rapl0/constraint_1_power_limit_uw=<new-value> --overw
 kubectl label node worker2 rapl1/constraint_0_power_limit_uw=<new-value> --overwrite
 kubectl label node worker2 rapl1/constraint_1_power_limit_uw=<new-value> --overwrite
 ```
+### Supprimer les labels
+```bash
+kubectl label node worker3 rapl0/constraint_0_power_limit_uw-
+kubectl label node worker3 rapl0/constraint_1_power_limit_uw-
+kubectl label node worker3 rapl1/constraint_0_power_limit_uw-
+kubectl label node worker3 rapl1/constraint_1_power_limit_uw-
+```
 
 ### get network policy as yaml
 ```bash
