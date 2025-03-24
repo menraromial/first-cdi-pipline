@@ -508,3 +508,44 @@ spec:
   retention: 30d
 
 ```
+### kcas-scheduler conf
+
+```yml
+apiVersion: kubescheduler.config.k8s.io/v1
+kind: KubeSchedulerConfiguration
+leaderElection:
+  # (Optional) Change true to false if you are not running a HA control-plane.
+  leaderElect: false
+clientConnection:
+  kubeconfig: /etc/kubernetes/scheduler.conf
+profiles:
+- schedulerName: kcas-scheduler
+  plugins:
+    queueSort:
+      enabled:
+      - name: PrioritySort
+    preFilter:
+      enabled:
+      - name: CarbonAware
+    filter:
+      enabled:
+      - name: CarbonAware
+    preScore:
+      enabled:
+      - name: CarbonAware
+    score:
+      enabled:
+      - name: CarbonAware
+    reserve:
+      enabled:
+      - name: CarbonAware
+    unreserve:
+      enabled:
+      - name: CarbonAware
+    bind:
+      enabled:
+      - name: DefaultBinder
+    multiPoint:
+      disabled:
+      - name: "*"
+```
