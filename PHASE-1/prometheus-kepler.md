@@ -539,9 +539,6 @@ profiles:
     reserve:
       enabled:
       - name: CarbonAware
-    unreserve:
-      enabled:
-      - name: CarbonAware
     bind:
       enabled:
       - name: DefaultBinder
