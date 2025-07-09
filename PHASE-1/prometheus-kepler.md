@@ -546,3 +546,83 @@ profiles:
       disabled:
       - name: "*"
 ```
+---
+
+### Supprimer des Namespace qui sont en mode Terminating
+
+#### Explication du problème
+
+Quand vous demandez la suppression d'un namespace (`kubectl delete ns mon-namespace`), Kubernetes ne le supprime pas immédiatement. Il le passe en état `Terminating` et attend que tous les contrôleurs qui ont des "finaliseurs" sur ce namespace aient terminé leur travail de nettoyage (suppression de LoadBalancers, de CRDs, etc.). Si le contrôleur qui a posé le finaliseur est défaillant, désinstallé ou ne répond plus, le finaliseur n'est jamais retiré et le namespace reste bloqué.
+
+#### Solution : Forcer la suppression (Méthode recommandée)
+
+La méthode la plus propre et la plus rapide est d'utiliser un petit script qui va :
+1.  Récupérer la configuration du namespace en JSON.
+2.  Supprimer la clé `finalizers` de sa spécification.
+3.  Envoyer cette configuration modifiée à l'API Kubernetes via un point d'accès spécial (`finalize`).
+
+Voici un script que vous pouvez exécuter directement dans votre terminal pour forcer la suppression des trois namespaces bloqués (`ingress-nginx`, `kubevirt`, `zipkin`).
+
+**Prérequis :** Assurez-vous d'avoir l'outil `jq` installé. C'est un processeur JSON en ligne de commande très courant. Si vous ne l'avez pas :
+*   Sur Debian/Ubuntu : `sudo apt-get install jq`
+*   Sur macOS (avec Homebrew) : `brew install jq`
+*   Sur RHEL/CentOS : `sudo yum install jq`
+
+#### Script à copier-coller
+
+```bash
+# Liste des namespaces à forcer
+NAMESPACES_TO_DELETE="ingress-nginx kubevirt zipkin"
+
+for ns in $NAMESPACES_TO_DELETE; do
+  echo "Tentative de suppression forcée du namespace: $ns"
+  
+  # Récupère la définition du namespace, retire les finaliseurs et met à jour via l'endpoint 'finalize'
+  kubectl get namespace "$ns" -o json | \
+  jq '.spec.finalizers = []' | \
+  kubectl replace --raw "/api/v1/namespaces/$ns/finalize" -f -
+  
+  echo "La commande de suppression forcée pour '$ns' a été envoyée."
+done
+
+echo "Vérifiez l'état des namespaces dans quelques instants avec 'kubectl get ns'."
+```
+
+Exécutez ce bloc de code dans votre terminal. Normalement, après quelques secondes, les namespaces devraient disparaître lorsque vous refaites un `kubectl get ns`.
+
+#### Alternative : Méthode Manuelle (plus complexe, si vous n'avez pas `jq`)
+
+Si vous ne pouvez pas installer `jq`, vous pouvez le faire manuellement pour chaque namespace, mais c'est plus laborieux.
+
+**Étape 1 : Lancer `kubectl proxy`**
+
+Ouvrez un **nouveau terminal** et lancez :
+```bash
+kubectl proxy
+# Starting to serve on 127.0.0.1:8001
+```
+Laissez ce terminal ouvert. Il crée un pont sécurisé vers votre API server Kubernetes.
+
+**Étape 2 : Éditer et forcer la mise à jour**
+
+Ouvrez un **autre terminal** et exécutez ces commandes pour chaque namespace à supprimer (remplacez `<NAMESPACE_A_SUPPRIMER>` par `ingress-nginx`, puis `kubevirt`, etc.).
+
+```bash
+# Remplacez <NAMESPACE_A_SUPPRIMER> par le nom du namespace, ex: ingress-nginx
+NAMESPACE_TO_DELETE="ingress-nginx"
+
+# 1. Récupérer la définition du namespace et retirer le finalizer
+kubectl get namespace $NAMESPACE_TO_DELETE -o json | \
+  sed 's/"kubernetes"//' > temp_namespace.json
+# Note: La commande sed est basique et retire juste le mot "kubernetes". 
+# Si vous avez d'autres finalizers, il faudra éditer le fichier manuellement.
+
+# 2. Envoyer la version modifiée à l'API via le proxy
+curl -k -H "Content-Type: application/json" -X PUT \
+  --data-binary @temp_namespace.json \
+  http://127.0.0.1:8001/api/v1/namespaces/$NAMESPACE_TO_DELETE/finalize
+
+# 3. Nettoyer
+rm temp_namespace.json
+```
+
