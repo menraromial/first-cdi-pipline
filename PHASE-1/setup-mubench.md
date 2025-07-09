@@ -53,3 +53,11 @@ s7-5fb7cbff7c-hkd6t         2/2     Running   0          11m
 s8-5549949968-72q2z         2/2     Running   0          11m
 s9-9576b784c-4npsj          2/2     Running   0          11m
 ```
+
+
+## Monitoring
+
+> **_NOTE:_**: Si vous utilisez la stack **prometheus-k8s** pour **Kepler** rassurez vous d'avoir ajouter le label `app: kiali` dans le **NetworkPolicy** de prometheus
+
+
+
