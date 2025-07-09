@@ -130,7 +130,7 @@ kubectl apply -f https://raw.githubusercontent.com/techiescamp/kubeadm-scripts/m
 ```
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.49.0/deploy/static/provider/baremetal/deploy.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.13.0/deploy/static/provider/baremetal/deploy.yaml
 ```
 
 ```bash
