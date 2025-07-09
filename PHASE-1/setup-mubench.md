@@ -61,9 +61,6 @@ s9-9576b784c-4npsj          2/2     Running   0          11m
 
 Si vous n'avez pas encore Prometheus-Grafana, decommentez la partie du script associée. 
 
-Voici la traduction en français :
-
----
 
 µBench utilise Prometheus, Grafana, Istio, Kiali et Jaeger pour obtenir des métriques et des traces des applications générées, comme décrit ci-dessous.
 Le fichier `monitoring-install.sh` installe ce framework dans le cluster. Il peut être exécuté soit depuis le bash Docker de µBench, soit depuis le shell de l’hôte avec :
@@ -118,3 +115,52 @@ helm install \
 kubectl apply -f kiali-nodeport.yaml
 
 ```
+
+
+### Ma première application µBench
+
+Depuis le conteneur µBench ou l’hôte, accédez au dossier `muBench` et exécutez :
+
+```zsh
+python3 Deployers/K8sDeployer/RunK8sDeployer.py -c Configs/K8sParameters.json
+```
+
+Cette commande crée l’application µBench décrite dans `Configs/K8sParameters.json`.
+Elle utilise le fichier [Examples/workmodel-serial-10services.json](#) qui spécifie une application composée de 10 microservices.
+Les clients envoient des requêtes au service **s0**, et **s0** appelle séquentiellement tous les autres services avant de renvoyer le résultat aux clients.
+Chaque service sollicite également le processeur (CPU).
+
+
+
+Pour charger l'application, vous pouvez utiliser le [Runner](#runner) de µBench :
+
+```zsh
+python3 Benchmarks/Runner/Runner.py -c Configs/RunnerParameters.json
+```
+
+Vous devriez voir quelque chose comme ceci :
+
+```zsh
+root@64ae03d1e5b8:~/muBench# python3 Benchmarks/Runner/Runner.py -c Configs/RunnerParameters.json
+###############################################
+############   Run Forrest Run!!   ############
+###############################################
+Heure de début : 09:13:04.291510 - 23/01/2023
+Requête traitée 2, latence 139, requêtes en attente 1
+Requête traitée 13, latence 129, requêtes en attente 1
+Requête traitée 24, latence 139, requêtes en attente 1
+....
+```
+
+> **_REMARQUE:_**: N'oubliez pas de changer `ms_access_gateway` dans `Configs/RunnerParameters.json` avec les configs de votre **ingress**
+
+
+
+> ***REMARQUE:*** Modifiez `Configs/K8sParameters.json` si votre service de résolution DNS Kubernetes est différent de `kube-dns`. Par exemple, dans certains clusters, il s’appelle `coredns`. Changez egalementles valeurs dans `kiali-values.yaml` pour avoir les bonnes configs de votre cluster
+
+Pour désinstaller l’application µBench, utilisez la commande suivante :
+
+```zsh
+kubectl delete -f SimulationWorkspace/yamls/
+```
+
